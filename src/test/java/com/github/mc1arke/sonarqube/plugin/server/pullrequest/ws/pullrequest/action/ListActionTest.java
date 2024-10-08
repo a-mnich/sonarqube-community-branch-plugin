@@ -33,6 +33,7 @@ import org.mockito.ArgumentCaptor;
 import org.sonar.api.server.ws.Request;
 import org.sonar.api.server.ws.Response;
 import org.sonar.api.server.ws.WebService;
+import org.sonar.api.utils.DateUtils;
 import org.sonar.db.DbClient;
 import org.sonar.db.component.BranchDao;
 import org.sonar.db.component.BranchDto;
@@ -137,7 +138,7 @@ class ListActionTest {
 
         SnapshotDao snapshotDao = mock(SnapshotDao.class);
         when(dbClient.snapshotDao()).thenReturn(snapshotDao);
-        when(snapshotDao.selectLastAnalysesByRootComponentUuids(any(), any())).thenReturn(List.of(new SnapshotDto().setUuid("componentUuid").setCreatedAt(1234L)));
+        when(snapshotDao.selectLastAnalysesByRootComponentUuids(any(), any())).thenReturn(List.of(new SnapshotDto().setRootComponentUuid("uuid3").setCreatedAt(1234567891234L)));
 
         Response response = mock(Response.class);
 
@@ -157,6 +158,7 @@ class ListActionTest {
                 .setKey("prKey2")
                 .setTitle("title2")
                 .setBranch("prBranch2")
+                .setAnalysisDate(DateUtils.formatDateTime(1234567891234L))
                 .setStatus(ProjectPullRequests.Status.newBuilder()
                     .build())
                 .setIsOrphan(true)
